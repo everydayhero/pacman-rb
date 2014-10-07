@@ -1,3 +1,6 @@
+require 'pacman/event'
+require 'pacman/null_event'
+
 module Pacman
   class MessageEvent < Event
     def valid?

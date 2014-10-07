@@ -1,4 +1,6 @@
+require 'pacman/message_event'
 require 'logger'
+require 'poseidon_cluster'
 
 module Pacman
   class Consumer
@@ -7,12 +9,21 @@ module Pacman
     configuration do
       env_variable_prefix 'EVENT_QUEUE'
 
-      property :consumer_name, default: 'pacman'
       property :topic, default: 'events'
-      property :url, default: 'localhost:9092'
+      property :consumer_name, default: 'pacman'
+      property :hosts, default: 'localhost:9092'
+      property :zookeeper_hosts, default: 'localhost:2181'
+
+      def hosts
+        @hosts.split ','
+      end
+
+      def zookeeper_hosts
+        @zookeeper_hosts.split ','
+      end
     end
 
-    attr_reder :config, :logger
+    attr_reader :config, :logger
 
     def initialize config: config, logger: Logger.new(STDOUT)
       @config = config
@@ -21,10 +32,9 @@ module Pacman
 
     def consume
       logger.info 'start consuming events'
-      loop do
-        messages = base_consumer.fetch
-        logger.debug "#{messages.count} messages fetched" if messages.any?
 
+      base_consumer.fetch_loop do |partition, messages|
+        logger.debug "#{messages.count} messages fetched" if messages.any?
         events = MessageEvent.from_messages messages
 
         if events.any?
@@ -37,12 +47,10 @@ module Pacman
     private
 
     def base_consumer
-      @base_consumer ||= Poseidon::PartitionConsumer.new config.consumer_name,
-        config.host,
-        config.port,
-        config.topic,
-        0,
-        :latest_offset
+      @base_consumer ||= Poseidon::ConsumerGroup.new config.consumer_name,
+        config.hosts,
+        config.zookeeper_hosts,
+        config.topic
     end
   end
 end
