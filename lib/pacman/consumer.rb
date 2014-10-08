@@ -1,6 +1,7 @@
 require 'pacman/message_event'
 require 'logger'
 require 'poseidon_cluster'
+require 'configify'
 
 module Pacman
   class Consumer
