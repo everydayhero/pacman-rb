@@ -34,7 +34,7 @@ module Pacman
     def consume
       logger.info 'start consuming events'
 
-      base_consumer.fetch_loop do |partition, messages|
+      base_consumer.fetch_loop do |_, messages|
         logger.debug "#{messages.count} messages fetched" if messages.any?
         events = MessageEvent.from_messages messages
 
@@ -48,10 +48,11 @@ module Pacman
     private
 
     def base_consumer
-      @base_consumer ||= Poseidon::ConsumerGroup.new config.consumer_name,
-        config.hosts,
-        config.zookeeper_hosts,
-        config.topic
+      @base_consumer ||=
+        Poseidon::ConsumerGroup.new config.consumer_name,
+                                    config.hosts,
+                                    config.zookeeper_hosts,
+                                    config.topic
     end
   end
 end
