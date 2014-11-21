@@ -1,5 +1,4 @@
-require 'pacman/event'
-require 'pacman/null_event'
+require 'json'
 
 module Pacman
   class MessageEvent < Event
