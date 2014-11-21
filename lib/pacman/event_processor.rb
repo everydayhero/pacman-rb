@@ -7,7 +7,7 @@ module Pacman
     end
 
     def process_record record
-      events = MessageEvent.from_messages Array.wrap record
+      events = MessageEvent.from_messages [record]
 
       event_handler.call events if events.any?
     end

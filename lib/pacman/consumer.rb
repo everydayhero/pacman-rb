@@ -1,4 +1,3 @@
-require 'logger'
 require 'kcl'
 require 'configify'
 
@@ -17,19 +16,17 @@ module Pacman
 
     attr_reader :config, :logger
 
-    def initialize config: config, logger: Logger.new(STDOUT)
+    def initialize config: config
       @config = config
       @logger = logger
     end
 
     def consume &block
-      logger.info 'start consuming events'
-
       consumer_executor.record_processor do
         EventProcessor.new block
       end
 
-      consumer_executor.run
+      consumer_executor.run ARGV
     end
 
     private

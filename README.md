@@ -21,6 +21,7 @@ The consumer accepts the following environment variables:
 
 ```ruby
 # EVENT_QUEUE_TOPIC=events
-# EVENT_QUEUE_HOSTS=kafka_queue_host1:9092,kafka_queue_host2:9092
-# EVENT_QUEUE_ZOOKEEPER_HOSTS=zookeeper_host1:2181,zookeeper_host2:2181
+# EVENT_QUEUE_CONSUMER_NAME=MyApp
+# EVENT_QUEUE_MAX_RECORDS=10
+# EVENT_QUEUE_READS_INTERVAL=1000
 ```
