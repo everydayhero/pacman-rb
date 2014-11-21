@@ -1,4 +1,3 @@
-require 'pacman/message_event'
 require 'logger'
 require 'poseidon_cluster'
 require 'configify'
