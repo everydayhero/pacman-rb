@@ -3,6 +3,7 @@ require 'kcl'
 module Pacman
   class EventProcessor < Kcl::AdvancedRecordProcessor
     def initialize event_handler
+      super()
       @event_handler = event_handler
     end
 
