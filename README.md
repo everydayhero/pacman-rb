@@ -2,7 +2,7 @@
 
 ![Pacman logo](https://cloud.githubusercontent.com/assets/7110204/4536930/d3ddafd6-4dd0-11e4-94a7-148f42515402.png)
 
-**Pacman** is a ruby based Kafka consumer consuming events generated through **cheese** (https://github.com/everydayhero/cheese).
+**Pacman** is a ruby based Kinesis consumer consuming events generated through **cheese** (https://github.com/everydayhero/cheese).
 
 The following shows a typical use case:
 

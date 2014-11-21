@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Pacman::VERSION
   spec.authors       = ['soloman']
   spec.email         = ['soloman1124@gmail.com']
-  spec.summary       = 'Kafka consumer for events through nark'
-  spec.description   = 'Kafka consumer for events through nark'
+  spec.summary       = 'Kinesis consumer for events through nark'
+  spec.description   = 'Kinesis consumer for events through nark'
   spec.homepage      = ''
   spec.license       = 'MIT'
 
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(/^(test|spec|features)\//)
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'poseidon_cluster', '~> 0.1.1'
+  spec.add_runtime_dependency 'amazon-kinesis-client-ruby', '~> 0.0.1'
   spec.add_runtime_dependency 'configify-rb', '0.0.1'
 
   spec.add_development_dependency 'bundler', '~> 1.7'
