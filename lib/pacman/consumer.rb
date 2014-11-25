@@ -12,6 +12,7 @@ module Pacman
       property :consumer_name
       property :max_records, default: 10
       property :reads_interval, default: 1000
+      property :initial_position, default: 'TRIM_HORIZON'
     end
 
     attr_reader :config, :logger
@@ -36,6 +37,7 @@ module Pacman
         executor.config stream_name: config.topic,
                         application_name: config.consumer_name,
                         max_records: config.max_records,
+                        initial_position_in_stream: config.initial_position,
                         idle_time_between_reads_in_millis: config.reads_interval
 
         executor.extra_class_path(*jar_files)
