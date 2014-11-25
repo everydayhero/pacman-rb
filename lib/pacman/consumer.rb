@@ -45,7 +45,7 @@ module Pacman
     end
 
     def log4j_config
-      @log4j_config ||= "#{jar_dir}/log4j.properties"
+      @log4j_config ||= "file:#{jar_dir}/log4j.properties"
     end
 
     def jar_files
