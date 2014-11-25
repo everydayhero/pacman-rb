@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(/^(test|spec|features)\//)
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'amazon-kinesis-client-ruby', '~> 0.0.1'
+  spec.add_runtime_dependency 'amazon-kinesis-client-ruby', '~> 0.0.3'
   spec.add_runtime_dependency 'configify-rb', '0.0.1'
 
   spec.add_development_dependency 'bundler', '~> 1.7'

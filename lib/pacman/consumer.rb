@@ -37,7 +37,23 @@ module Pacman
                         application_name: config.consumer_name,
                         max_records: config.max_records,
                         idle_time_between_reads_in_millis: config.reads_interval
+
+        executor.extra_class_path(*jar_files)
+
+        executor.system_properties 'log4j.configuration' => log4j_config
       end
+    end
+
+    def log4j_config
+      @log4j_config ||= "#{jar_dir}/log4j.properties"
+    end
+
+    def jar_files
+      @jar_files ||= Dir["#{jar_dir}/*.jar"]
+    end
+
+    def jar_dir
+      @jar_dir ||= File.expand_path '../../jars', __FILE__
     end
   end
 end
