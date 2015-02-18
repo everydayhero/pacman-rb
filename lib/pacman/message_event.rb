@@ -14,10 +14,10 @@ module Pacman
     end
 
     def self.from_message raw_message
-      message_json = JSON.parse raw_message.value
+      message_json = JSON.parse raw_message[:data]
       new name: message_json['name'],
           time: message_json['time'],
-          message_id: raw_message.offset,
+          message_id: raw_message[:sequence_number],
           payload: message_json['payload']
     rescue JSON::ParserError
       NullEvent.new

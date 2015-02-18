@@ -1,5 +1,4 @@
-require 'logger'
-require 'poseidon_cluster'
+require 'kcl'
 require 'configify'
 
 module Pacman
@@ -9,49 +8,54 @@ module Pacman
     configuration do
       env_variable_prefix 'EVENT_QUEUE'
 
-      property :topic, default: 'events'
-      property :consumer_name, default: 'pacman'
-      property :hosts, default: 'localhost:9092'
-      property :zookeeper_hosts, default: 'localhost:2181'
-
-      def hosts
-        @hosts.split ','
-      end
-
-      def zookeeper_hosts
-        @zookeeper_hosts.split ','
-      end
+      property :topic
+      property :consumer_name
+      property :max_records, default: 10
+      property :reads_interval, default: 1000
+      property :initial_position, default: 'TRIM_HORIZON'
     end
 
     attr_reader :config, :logger
 
-    def initialize config: config, logger: Logger.new(STDOUT)
+    def initialize config: config
       @config = config
       @logger = logger
     end
 
-    def consume
-      logger.info 'start consuming events'
-
-      base_consumer.fetch_loop do |_, messages|
-        logger.debug "#{messages.count} messages fetched" if messages.any?
-        events = MessageEvent.from_messages messages
-
-        if events.any?
-          logger.debug "#{events.count} events fetched"
-          yield events
-        end
+    def consume &block
+      consumer_executor.record_processor do
+        EventProcessor.new block
       end
+
+      consumer_executor.run ARGV
     end
 
     private
 
-    def base_consumer
-      @base_consumer ||=
-        Poseidon::ConsumerGroup.new config.consumer_name,
-                                    config.hosts,
-                                    config.zookeeper_hosts,
-                                    config.topic
+    def consumer_executor
+      @consumer_executor ||= Kcl::Executor.new do |executor|
+        executor.config stream_name: config.topic,
+                        application_name: config.consumer_name,
+                        max_records: config.max_records,
+                        initial_position_in_stream: config.initial_position,
+                        idle_time_between_reads_in_millis: config.reads_interval
+
+        executor.extra_class_path(*jar_files)
+
+        executor.system_properties 'log4j.configuration' => log4j_config
+      end
+    end
+
+    def log4j_config
+      @log4j_config ||= "file:#{jar_dir}/log4j.properties"
+    end
+
+    def jar_files
+      @jar_files ||= Dir["#{jar_dir}/*.jar"]
+    end
+
+    def jar_dir
+      @jar_dir ||= File.expand_path '../../jars', __FILE__
     end
   end
 end

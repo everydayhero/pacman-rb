@@ -5,7 +5,7 @@ describe Pacman::MessageEvent do
     subject { Pacman::MessageEvent.from_message raw_message }
 
     context 'When with raw event contains invalid JSON payload' do
-      let(:raw_message) { Poseidon::Message.new value: 'bad' }
+      let(:raw_message) { { data: 'bad' } }
 
       it { is_expected.to be_a Pacman::NullEvent }
     end
@@ -20,12 +20,14 @@ describe Pacman::MessageEvent do
           payload: payload
         }.to_json
       }
-      let(:raw_message) { Poseidon::Message.new value: message_json }
+      let(:raw_message) { { data: message_json, sequence_number: 0 } }
 
       it { is_expected.to have_attributes name: 'test_event' }
       it { is_expected.to have_attributes time: time }
       it { is_expected.to have_attributes payload: { 'ping' => 'pong' } }
-      it { is_expected.to have_attributes message_id: raw_message.offset }
+      it {
+        is_expected.to have_attributes message_id: raw_message[:sequence_number]
+      }
     end
   end
 end
