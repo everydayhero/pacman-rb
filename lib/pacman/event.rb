@@ -17,5 +17,9 @@ module Pacman
         message_id: message_id
       }
     end
+
+    def to_json
+      to_event_hash.to_json
+    end
   end
 end
