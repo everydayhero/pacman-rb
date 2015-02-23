@@ -13,6 +13,8 @@ module Pacman
       property :max_records, default: 10
       property :reads_interval, default: 1000
       property :initial_position, default: 'TRIM_HORIZON'
+      property :max_active_threads, default: 0
+      property :shard_sync_interval, default: 60000
     end
 
     attr_reader :config, :logger
@@ -38,6 +40,8 @@ module Pacman
                         application_name: config.consumer_name,
                         max_records: config.max_records,
                         initial_position_in_stream: config.initial_position,
+                        max_active_threads: config.max_active_threads,
+                        shard_sync_interval_millis: config.shard_sync_interval,
                         idle_time_between_reads_in_millis: config.reads_interval
 
         executor.extra_class_path(*jar_files)
