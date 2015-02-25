@@ -10,11 +10,13 @@ module Pacman
 
       property :topic
       property :consumer_name
+      property :worker_id,
+               default: "#{ENV.fetch('HOSTNAME', `hostname`).strip}-#{Time.now.to_i}"
       property :max_records, default: 10
       property :reads_interval, default: 1000
       property :initial_position, default: 'TRIM_HORIZON'
       property :max_active_threads, default: 0
-      property :shard_sync_interval, default: 60000
+      property :shard_sync_interval, default: 60_000
     end
 
     attr_reader :config, :logger
@@ -34,9 +36,11 @@ module Pacman
 
     private
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def consumer_executor
       @consumer_executor ||= Kcl::Executor.new do |executor|
         executor.config stream_name: config.topic,
+                        worker_id: config.worker_id,
                         application_name: config.consumer_name,
                         max_records: config.max_records,
                         initial_position_in_stream: config.initial_position,
@@ -49,6 +53,7 @@ module Pacman
         executor.system_properties 'log4j.configuration' => log4j_config
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def log4j_config
       @log4j_config ||= "file:#{jar_dir}/log4j.properties"
