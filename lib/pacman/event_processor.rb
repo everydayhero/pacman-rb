@@ -21,7 +21,7 @@ module Pacman
     def debug events
       return unless ENV['PACMAN_DEBUG_EVENTS'] == 'true'
 
-      puts events.first.to_json if events.any?
+      STDERR.puts events.first.to_json if events.any?
     end
   end
 end
