@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'amazon-kinesis-client-ruby', '~> 1.0.1'
   spec.add_runtime_dependency 'configify-rb', '0.0.1'
+  spec.add_runtime_dependency 'statsd-instrument', '~> 2.0.6'
 
   spec.add_development_dependency 'bundler', '~> 1.7'
   spec.add_development_dependency 'rake', '~> 10.0'
