@@ -7,7 +7,7 @@ class HealthCheckTracker
   end
 
   def track event
-    return unless match?
+    return unless match? event
 
     StatsD.gauge metrics_key, delay(event), sample_rate: 1.0
   end
