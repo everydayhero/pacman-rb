@@ -19,16 +19,15 @@ module Pacman
       property :shard_sync_interval, default: 60_000
     end
 
-    attr_reader :config, :logger
+    attr_reader :config
 
     def initialize config: config
       @config = config
-      @logger = logger
     end
 
     def consume &block
       consumer_executor.record_processor do
-        EventProcessor.new block
+        EventProcessor.new config.consumer_name, block
       end
 
       consumer_executor.run ARGV
