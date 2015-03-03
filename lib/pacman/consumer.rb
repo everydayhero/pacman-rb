@@ -11,7 +11,7 @@ module Pacman
       property :topic
       property :consumer_name
       property :worker_id,
-               default: "#{ENV.fetch('HOSTNAME', `hostname`).strip}-#{Time.now.to_i}"
+               default: "#{ENV.fetch('PLAIN_HOSTNAME', `hostname`).strip}-#{Time.now.to_i}"
       property :max_records, default: 10
       property :reads_interval, default: 1000
       property :initial_position, default: 'TRIM_HORIZON'

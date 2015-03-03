@@ -39,7 +39,7 @@ class HealthCheckTracker
   end
 
   def tracker_host
-    ENV['HOST_IP']
+    ENV['PLAIN_HOST_IP']
   end
 
   def config_statsd
